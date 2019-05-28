@@ -1,0 +1,59 @@
+esphome:
+  name: tactil
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: "domotica"
+  password: "insega1993"
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "Touchpad1"
+    on_press:
+      - switch.toggle: relay1
+  - platform: gpio
+    pin:
+      number: GPIO9
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "Touchpad2"
+    on_press:
+      - switch.toggle: relay2
+  - platform: status
+    name: "Sonoff T1 UK 3 Gang Status"
+
+switch:
+  - platform: gpio
+    name: "Sonoff T1 UK 3 Gang Relay 1"
+    pin: GPIO12
+    id: relay1
+  - platform: gpio
+    name: "Sonoff T1 UK 3 Gang Relay 2"
+    pin: GPIO5
+    id: relay2
+
+output:
+  # Register the blue LED as a dimmable output ....
+  - platform: esp8266_pwm
+    id: blue_led
+    pin: GPIO13
+    inverted: True
+
+light:
+  # ... and then make a light out of it.
+  - platform: monochromatic
+    name: "Sonoff T1 UK 3 Gang Blue LED"
+    output: blue_led
+    
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
